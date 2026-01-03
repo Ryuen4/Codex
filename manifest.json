@@ -1,0 +1,21 @@
+{
+  "name": "Codex - Professional Writer's Workspace",
+  "short_name": "Codex",
+  "description": "High-fidelity authoring environment with node-based structure and analytics.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/72x72/1f4d3.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/512x512/1f4d3.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
