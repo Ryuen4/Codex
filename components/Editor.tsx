@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BookNode, WritingSession } from '../types';
+import { BookNode } from '../types';
 import { 
-  Sparkles,
   Bold,
   Italic,
   List,
@@ -11,7 +10,6 @@ import {
   Square,
   CheckSquare
 } from 'lucide-react';
-import { generateContinuation } from '../services/geminiService';
 import { countWords } from '../utils/statsCalculator';
 
 interface EditorProps {
@@ -32,7 +30,6 @@ export const Editor: React.FC<EditorProps> = ({
   accentColor 
 }) => {
   const [content, setContent] = useState(node.content);
-  const [isGenerating, setIsGenerating] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -50,16 +47,6 @@ export const Editor: React.FC<EditorProps> = ({
     }, 1000);
     return () => clearTimeout(handler);
   }, [content, node.id, onUpdate, node.title]);
-
-  const handleAIHelp = async () => {
-    if (isGenerating || isCover) return;
-    setIsGenerating(true);
-    const suggestion = await generateContinuation(content, node.title);
-    if (suggestion) {
-      setContent(prev => prev + '\n\n' + suggestion);
-    }
-    setIsGenerating(false);
-  };
 
   const insertFormat = (prefix: string, suffix: string = '') => {
     if (isCover) return;
@@ -215,8 +202,6 @@ export const Editor: React.FC<EditorProps> = ({
             <button onClick={() => insertFormat('**', '**')} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Bold"><Bold size={14}/></button>
             <button onClick={() => insertFormat('*', '*')} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Italic"><Italic size={14}/></button>
             <button onClick={() => insertFormat('\n* ', '')} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Bullet"><List size={14}/></button>
-            <div className="w-px h-4 bg-slate-200 dark:bg-graphite-800 mx-1"></div>
-            <button onClick={handleAIHelp} className={`p-2 transition-colors ${isGenerating ? 'animate-spin' : ''} text-indigo-500`} title="AI Help"><Sparkles size={14}/></button>
           </div>
         </div>
       )}
