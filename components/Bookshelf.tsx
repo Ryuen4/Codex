@@ -10,7 +10,8 @@ import {
   Search, 
   Download, 
   Upload,
-  BookOpen
+  BookOpen,
+  DownloadCloud
 } from 'lucide-react';
 
 interface BookshelfProps {
@@ -21,6 +22,8 @@ interface BookshelfProps {
   onImportLibrary: (books: Book[]) => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
+  isInstallable?: boolean;
+  onInstallApp?: () => void;
 }
 
 export const Bookshelf: React.FC<BookshelfProps> = ({ 
@@ -30,7 +33,9 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
   onDeleteBook, 
   onImportLibrary,
   theme, 
-  onToggleTheme 
+  onToggleTheme,
+  isInstallable,
+  onInstallApp
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -100,6 +105,18 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
           
           <div className="flex items-center gap-3">
             <div className="flex bg-white dark:bg-graphite-900 border border-slate-200 dark:border-graphite-800 rounded-xl p-1 shadow-sm">
+              {isInstallable && (
+                <>
+                  <button 
+                    onClick={onInstallApp}
+                    className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                    title="Install App"
+                  >
+                    <DownloadCloud size={18} />
+                  </button>
+                  <div className="w-px h-6 bg-slate-100 dark:bg-graphite-800 mx-1"></div>
+                </>
+              )}
               <button 
                 onClick={handleExportLibrary}
                 className="p-2 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"

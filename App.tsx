@@ -27,6 +27,31 @@ const App: React.FC = () => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
+  // PWA Install State
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setInstallPrompt(null);
+    }
+  };
+
   // Persistence for books
   useEffect(() => {
     localStorage.setItem('codex_books', JSON.stringify(books));
@@ -75,6 +100,8 @@ const App: React.FC = () => {
         onBack={() => setActiveBookId(null)}
         theme={theme}
         onToggleTheme={toggleTheme}
+        isInstallable={!!installPrompt}
+        onInstallApp={handleInstallApp}
       />
     );
   }
@@ -88,6 +115,8 @@ const App: React.FC = () => {
       onImportLibrary={handleImportLibrary}
       theme={theme}
       onToggleTheme={toggleTheme}
+      isInstallable={!!installPrompt}
+      onInstallApp={handleInstallApp}
     />
   );
 };

@@ -15,7 +15,8 @@ import {
   Sparkles,
   Eye,
   Edit3,
-  Check
+  Check,
+  DownloadCloud
 } from 'lucide-react';
 
 interface BookWorkspaceProps {
@@ -24,9 +25,19 @@ interface BookWorkspaceProps {
   onBack: () => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
+  isInstallable?: boolean;
+  onInstallApp?: () => void;
 }
 
-export const BookWorkspace: React.FC<BookWorkspaceProps> = ({ book, onUpdateBook, onBack, theme, onToggleTheme }) => {
+export const BookWorkspace: React.FC<BookWorkspaceProps> = ({ 
+  book, 
+  onUpdateBook, 
+  onBack, 
+  theme, 
+  onToggleTheme,
+  isInstallable,
+  onInstallApp
+}) => {
   const [activeNodeId, setActiveNodeId] = useState<string | null>(book.nodes[0]?.id || null);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isInspectorOpen, setInspectorOpen] = useState(true);
@@ -144,6 +155,17 @@ export const BookWorkspace: React.FC<BookWorkspaceProps> = ({ book, onUpdateBook
           </div>
           
           <div className="flex items-center gap-2">
+            {isInstallable && (
+               <button 
+                 onClick={onInstallApp} 
+                 className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-600 dark:text-blue-400 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all mr-2"
+                 title="Install Web App"
+               >
+                 <DownloadCloud size={12} />
+                 <span>Install</span>
+               </button>
+            )}
+
             {isSaving && <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest animate-pulse mr-2">Syncing</span>}
             {!isSaving && <Check size={14} className="text-emerald-500 mr-2" />}
 
